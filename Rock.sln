@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock", "Rock.csproj", "{B6FBD35D-D14C-4EDD-9024-6D4D7C15B3DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6FBD35D-D14C-4EDD-9024-6D4D7C15B3DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6FBD35D-D14C-4EDD-9024-6D4D7C15B3DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6FBD35D-D14C-4EDD-9024-6D4D7C15B3DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6FBD35D-D14C-4EDD-9024-6D4D7C15B3DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F1996446-A43F-4220-837C-89CFFFF1D685}
+	EndGlobalSection
+EndGlobal
