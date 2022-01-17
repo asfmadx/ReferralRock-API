@@ -1,0 +1,76 @@
+﻿@model RockApi.Models.ReferralSet
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="white-block">
+    <a class="btn btn-primary" asp-controller="Members" asp-action="Index">Back</a>
+    <h1 class="display-4">Referrals</h1>
+    <span>Referrals: @Model.referrals.Count</span>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Program
+                </th>
+                <th>
+                    Created
+                </th>
+                <th>
+                    Qualified
+                </th>
+                <th>
+                    Approved
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Referral r in Model.referrals)
+            {
+                <tr>
+                    <td>
+                        @r.displayName
+                    </td>
+                    <td>
+                        @r.status
+                    </td>
+                    <td>
+                        @r.amountFormatted
+                    </td>
+                    <td>
+                        @r.programName
+                    </td>
+                    <td>
+                        @DateTime.Parse(r.createDate).ToShortDateString()
+                    </td>
+                    <td>
+                        @if (r.qualifiedDate != null)
+                        {
+                            @DateTime.Parse(r.qualifiedDate).ToShortDateString()
+                        }
+                    </td>
+                    <td>
+                        @if (r.approvedDate != null)
+                        {
+                            @DateTime.Parse(r.approvedDate).ToShortDateString()
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@r.id">Edit</a> |
+                        <a asp-action="Delete">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

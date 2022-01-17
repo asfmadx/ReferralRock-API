@@ -1,0 +1,47 @@
+﻿@model RockApi.Models.MemberSet
+@{
+    ViewData["Title"] = "Members";
+}
+
+<div class="white-block">
+    <h1 class="display-4">Members</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Program
+                </th>
+                <th>
+                    Code
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Member member in Model.members)
+            {
+                <tr>
+                    <td>
+                        <a href="#">
+                            @member.displayName
+                        </a>
+                    </td>
+                    <td>
+                        @member.programTitle
+                    </td>
+                    <td>
+                        @member.referralCode
+                    </td>
+                    <td class="text-right">
+                        <a href="@Url.Action("Index","Referrals",new { memberid = member.id })">View Referrals</a> | <a href="@Url.Action("Create","Referrals",new { referralCode = member.referralCode })">Add Referral</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
