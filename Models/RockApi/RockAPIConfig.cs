@@ -19,7 +19,8 @@ namespace RockApi
         }
         public static string Base64EncodeKeys(string PublicKey, string PrivateKey)
         {
-            return string.Empty;
+            //Not implemented
+            return AuthToken;
         }
     }
 }

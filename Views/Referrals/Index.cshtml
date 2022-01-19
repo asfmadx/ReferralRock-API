@@ -1,13 +1,14 @@
-﻿@model RockApi.Models.ReferralSet
+﻿@model List<Referral>
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="white-block">
-    <a class="btn btn-primary" asp-controller="Members" asp-action="Index">Back</a>
+    <a class="btn btn-outline-primary" href="@ViewData["returnUrl"]">Back</a>
+    <a class="btn btn-primary" asp-controller="Referrals" asp-action="Create" asp-route-referralcode="@Context.Request.Query["referralcode"]" asp-route-ReturnUrl="@Context.Request.GetEncodedPathAndQuery()">Add Referral</a>
     <h1 class="display-4">Referrals</h1>
-    <span>Referrals: @Model.referrals.Count</span>
-    <table class="table">
+    <span>Referrals: @Model.Count</span>
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>
@@ -31,11 +32,12 @@
                 <th>
                     Approved
                 </th>
-                <th></th>
+                <th class="text-right">
+                </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (Referral r in Model.referrals)
+            @foreach (Referral r in Model)
             {
                 <tr>
                     <td>
@@ -65,9 +67,9 @@
                             @DateTime.Parse(r.approvedDate).ToShortDateString()
                         }
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@r.id">Edit</a> |
-                        <a asp-action="Delete">Delete</a>
+                    <td class="text-right">
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@r.id" asp-route-ReturnUrl="@Context.Request.GetEncodedPathAndQuery()">Edit</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@r.id" asp-route-ReturnUrl="@Context.Request.GetEncodedPathAndQuery()">Delete</a>
                     </td>
                 </tr>
             }

@@ -1,16 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace RockApi.Models
+﻿namespace RockApi
 {
-    public class MemberSet
-    {
-        public int offset { get; set; }
-        public int total { get; set; }
-        public string message { get; set; }
-        public List<Member> members { get; set; }
-    }
-
-    public class Member
+    public class Member : IRockEntity
     {
         public string id { get; set; }
         public string displayName { get; set; }

@@ -1,80 +1,102 @@
 ﻿using RestSharp;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RockApi.Services
+namespace RockApi
 {
-    public abstract class Service<T>
+    public abstract class Service<T> where T : IRockEntity
     {
-        public abstract string BasePath { get; }
+        //Different paths used by the api. Derived services will override these  
+        protected abstract string ListPath { get; } //GET
+        protected abstract string GetSinglePath { get; } //GET
+        protected abstract string CreatePath { get; } //POST
+        protected abstract string UpdatePath { get; } //POST
+        protected abstract string RemovePath { get; } //DELETE
+
+
         protected RestClient Client;
         protected Service()
         {
             Client = new RestClient(RockAPIConfig.ApiBase);
         }
 
-        private string BasePathPlural => $"{BasePath}s";
-
-        public virtual async Task<TListType> ListAsync<TListType>(List<QueryOption> Options = null)
+        /// <summary>
+        /// List method
+        /// </summary>
+        /// <typeparam name="TListType">An api set</typeparam>
+        /// <param name="Options">A collection of query string parameters</param>
+        /// <returns>An api set of the requested type</returns>
+        protected async Task<TListType> ListEntitiesAsync<TListType>(QueryOptions Options = null) where TListType : IRockEntitySet
         {
-            var request = new RestRequest(BasePathPlural, Method.Get);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", $"Basic {RockAPIConfig.AuthToken}");
-            if (Options != null)
-            {
-                Options.ForEach(f => request.AddQueryParameter(f.Parameter, f.Value));
-            }
-            return await Client.GetAsync<TListType>(request);
-        }
-
-        public virtual async Task CreateAsync(object model)
-        {
-            var request = new RestRequest(BasePathPlural, Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", $"Basic {RockAPIConfig.AuthToken}");
-            request.AddBody(model);
-            _ = await Client.ExecuteAsync(request);
+            var response = await this.MakeRequest<TListType>(ListPath, Method.Get, null, Options);
+            return response.Data;
         }
 
         /// <summary>
-        /// This method is only available on "api/referral".  No not use on "api/member"
+        /// Get single method
         /// </summary>
-        /// <param name="Options"></param>
-        /// <returns></returns>
-        public virtual async Task<T> GetAsync(List<QueryOption> Options = null)
+        /// <param name="Options">A collection of query string parameters</param>
+        /// <returns>A single instance of type T</returns>
+        protected async Task<T> GetEntityAsync(QueryOptions Options = null)
         {
-            //The method getsingle is not available for all endpoints.  
-            var request = new RestRequest($"{BasePath}/getsingle", Method.Get);
+            var response = await this.MakeRequest<T>(GetSinglePath, Method.Get, null, Options);
+            return response.Data;
+        }
+
+        /// <summary>
+        /// Create method
+        /// </summary>
+        /// <param name="CreateModel">An instance of type T to create</param>
+        /// <returns></returns>
+        protected async Task CreateEntityAsync(object CreateModel)
+        {
+            _ = await this.MakeRequest<RestResponse>(CreatePath, Method.Post, CreateModel);
+        }
+
+        /// <summary>
+        /// Update method
+        /// </summary>
+        /// <param name="UpdateInfo">An update object that gets added to the request body</param>
+        /// <returns></returns>
+        protected async Task UpdateEntityAsync(object UpdateInfo)
+        {
+            _ = await this.MakeRequest<RestResponse>(UpdatePath, Method.Post, UpdateInfo);
+        }
+
+        /// <summary>
+        /// Remove method
+        /// </summary>
+        /// <param name="RemoveInfo">A remove object that gets added to the request body</param>
+        /// <returns></returns>
+        protected async Task RemoveEntityAsync(object RemoveInfo)
+        {
+            _ = await this.MakeRequest<RestResponse>(RemovePath, Method.Post, RemoveInfo);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="Path">The api path</param>
+        /// <param name="httpMethod">The http method</param>
+        /// <param name="Model">A model, if applicable, to be added to the reqyest body</param>
+        /// <param name="Options">A collection of query string parameters</param>
+        /// <returns></returns>
+        private async Task<RestResponse<TResponse>> MakeRequest<TResponse>(string Path, Method httpMethod, object Model = null, QueryOptions Options = null)
+        {
+            var request = new RestRequest(Path, httpMethod);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", $"Basic {RockAPIConfig.AuthToken}");
+            if (Model != null)
+            {
+                request.AddBody(Model);
+            }
             if (Options != null)
             {
-                Options.ForEach(f => request.AddQueryParameter(f.Parameter, f.Value));
+                Options.Options.ForEach(f => request.AddQueryParameter(f.Parameter, f.Value));
             }
-            return await Client.GetAsync<T>(request);
-        }
-
-        public virtual async Task UpdateAsync()
-        {
-            var request = new RestRequest($"{BasePath}/update", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", $"Basic {RockAPIConfig.AuthToken}");
-
-
-
-            _ = await Client.PostAsync(request);
+            return await Client.ExecuteAsync<TResponse>(request);
         }
     }
 
-    public class QueryOption
-    {
-        public QueryOption(string Parameter, string Value)
-        {
-            this.Parameter = Parameter;
-            this.Value = Value;
-        }
-
-        public string Parameter { get; }
-        public string Value { get; }
-    }
 }

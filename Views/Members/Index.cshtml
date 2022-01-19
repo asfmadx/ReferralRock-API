@@ -1,11 +1,11 @@
-﻿@model RockApi.Models.MemberSet
+﻿@model List<Member>
 @{
     ViewData["Title"] = "Members";
 }
 
 <div class="white-block">
     <h1 class="display-4">Members</h1>
-    <table class="table">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>
@@ -17,29 +17,28 @@
                 <th>
                     Code
                 </th>
-                <th>
+                @*<th>
 
-                </th>
+                </th>*@
             </tr>
         </thead>
         <tbody>
-            @foreach (Member member in Model.members)
+            @foreach (Member member in Model)
             {
                 <tr>
                     <td>
-                        <a href="#">
-                            @member.displayName
-                        </a>
+                        <a asp-controller="Referrals" asp-route-referralcode="@member.referralCode" asp-route-returnUrl="@Context.Request.Path">@member.displayName</a>
                     </td>
                     <td>
-                        @member.programTitle
+                        @member.programName (@member.programTitle)
                     </td>
                     <td>
                         @member.referralCode
                     </td>
-                    <td class="text-right">
-                        <a href="@Url.Action("Index","Referrals",new { memberid = member.id })">View Referrals</a> | <a href="@Url.Action("Create","Referrals",new { referralCode = member.referralCode })">Add Referral</a>
-                    </td>
+                    @*<td class="text-right">
+                            <a class="btn btn-primary" asp-controller="Referrals" asp-route-referralcode="@member.referralCode">View</a>
+                            <a class="btn btn-primary" asp-action="Create" asp-controller="Referrals" asp-route-referralCode="@member.referralCode">Add</a>
+                    </td>*@
                 </tr>
             }
         </tbody>

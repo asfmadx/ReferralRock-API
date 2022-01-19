@@ -1,6 +1,6 @@
-﻿namespace RockApi.Models
+﻿namespace RockApi
 {
-    public class PayoutInfo
+    public class PayoutInfo : IRockEntity
     {
         public string payoutType { get; set; }
         public bool useDefaultValues { get; set; }

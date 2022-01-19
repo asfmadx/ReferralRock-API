@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="white-block">
+    <h4>
+        ReferralRock API Demonstration
+    </h4>
+    <p>From: Adam Clark</p>
+
+    <a class="btn btn-primary" asp-action="Index" asp-controller="Members">View Members</a>
+    <br />   <br />
+    <hr />
+    <h5>Services</h5>
+    <p>
+        The API is interacted with through various services based on the ReferralRock API's entities.<br />
+        For example, the following code would create a new <code>MemberService</code> and then list the Members.
+    </p>
+    <pre><code>
+    var MemberService = new MemberService();
+    var model = await MemberService.ListAsync();
+    </code></pre>
+    <p>All services inherit from the <code>Service</code> class so that more services can be added quickly.</p>
+    <hr />
+    <h5>Query Options</h5>
+    <p>
+        Endpoints that require query parameters can have that information passed to them using the <code>QueryOptions</code> class.
+        <br />
+        The following code gets a single referral bases on it's id.
+    </p>
+    <pre><code>
+    var Service = new ReferralService();
+
+    var QueryOptions = new QueryOptions();
+    QueryOptions.Options.Add(new QueryOption("referralQuery", id));
+
+    Referral model = await Service.GetAsync(QueryOptions);
+</code></pre>
+    <hr />
+    <h5>Body Info</h5>
+    <p>Updating and deleting entities requires information to be added to the body of the request.</p>
+    <p>Information telling the API how to find the appropriate referral to update/delete is added to the body of the request by passing a collection of <code>UpdateReferralInfo</code> or <code>RemoveReferralInfo</code>.</p>
+    <pre><code>
+    var Service = new ReferralService();
+    await Service.RemoveAsync(new List<RemoveReferralInfo> { new RemoveReferralInfo(id) });
+</code></pre>
+    <br />
+</div>

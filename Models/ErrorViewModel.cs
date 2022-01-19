@@ -1,6 +1,6 @@
 using System;
 
-namespace Rock.Models
+namespace Rock
 {
     public class ErrorViewModel
     {
